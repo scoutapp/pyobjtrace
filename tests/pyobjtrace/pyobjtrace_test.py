@@ -6,11 +6,9 @@ def test_enables_and_disabled():
     objtrace.disable()
 
 def test_allocation_counts():
-    x = 0
     l = []
     objtrace.enable()
-    while x < 100:
+    for _ in range(100):
         l.append([1])
-        x = x + 1
     c = objtrace.get_counts()
-    assert((10, 0, 0, 0) == c)
+    assert((99, 0, 0, 2) == c)
