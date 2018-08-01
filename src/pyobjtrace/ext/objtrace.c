@@ -15,10 +15,10 @@ struct {
     PyMemAllocator obj;
 } hook;
 
-static __thread uint64_t allocs;
-static __thread uint64_t callocs;
-static __thread uint64_t reallocs;
-static __thread uint64_t frees;
+static __thread unsigned long long allocs;
+static __thread unsigned long long callocs;
+static __thread unsigned long long reallocs;
+static __thread unsigned long long frees;
 
 static void* hook_malloc(void *ctx, size_t size)
 {
@@ -72,7 +72,7 @@ static void remove_hooks(void)
 }
 
 static PyObject*
-objtrace_enable(PyObject *module, PyObject *args)
+objtrace_enable(PyObject *module)
 {
     enabled = 1;
     if (!installed) {
@@ -93,16 +93,25 @@ objtrace_disable(PyObject *module)
     Py_RETURN_NONE;
 }
 
+static PyObject*
+objtrace_get_counts(PyObject *module)
+{
+    return Py_BuildValue("KKKK", allocs, callocs, reallocs, frees);
+}
+
 PyDoc_STRVAR(module_doc,
 "objtrace module.");
 
 static PyMethodDef module_methods[] = {
     {"enable",
-     (PyCFunction)objtrace_enable, METH_VARARGS,
+     (PyCFunction)objtrace_enable, METH_NOARGS,
      PyDoc_STR("enable()")},
     {"disable",
      (PyCFunction)objtrace_disable, METH_NOARGS,
      PyDoc_STR("disable()")},
+    {"get_counts",
+     (PyCFunction)objtrace_get_counts, METH_NOARGS,
+     PyDoc_STR("get_counts()")},
     {NULL, NULL}  /* sentinel */
 };
 
