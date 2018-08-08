@@ -3,7 +3,7 @@ import os
 
 from setuptools import find_packages, setup, Extension
 
-long_description = 'Scout Application Performance Monitoring Agent - https://scoutapp.com'
+long_description = 'Object Allocation Tracer for Scout Application Performance Monitoring Agent - https://scoutapp.com'
 if os.path.exists('README.md'):
     long_description = open('README.md').read()
 
